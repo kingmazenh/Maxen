@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -13,12 +12,14 @@
       margin: 0;
       padding: 0;
     }
+
     header {
       background: #1f1f1f;
       text-align: center;
       padding: 1rem;
       box-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
+
     .container {
       display: flex;
       flex-wrap: wrap;
@@ -26,6 +27,7 @@
       padding: 1rem;
       gap: 1.5rem;
     }
+
     .card {
       background: #1e1e1e;
       border-radius: 12px;
@@ -34,27 +36,26 @@
       max-width: 400px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
+
     .card video {
       width: 100%;
-      height: 225px;
+      height: 300px;
       object-fit: cover;
-      background-color: #000;
-      border-bottom: 1px solid #333;
+      background: black;
+      display: block;
     }
+
+    .size {
+      font-size: 0.85rem;
+      color: #888;
+      text-align: center;
+      padding-top: 0.5rem;
+    }
+
     .caption {
       text-align: center;
       color: #ccc;
       padding: 0.5rem;
-    }
-    .fullscreen-btn {
-      display: block;
-      text-align: center;
-      background: #00ccff;
-      color: black;
-      padding: 0.5rem;
-      border-radius: 0 0 12px 12px;
-      font-weight: bold;
-      cursor: pointer;
     }
   </style>
 </head>
@@ -63,43 +64,70 @@
     <h1>🎬 مكتبة Mazen</h1>
     <p style="color: #aaa;">📂 فيديوهات مرفوعة يدويًا</p>
   </header>
+
   <div class="container" id="videoContainer">جارٍ التحميل...</div>
 
   <script>
+    // تنسيق الحجم إلى وحدة مقروءة
+    function formatSize(bytes) {
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      if (bytes === 0) return '0 B';
+      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+      return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+    }
+
+    // جلب الحجم عبر HEAD
+    function requestFileSize(url) {
+      return fetch(url, { method: 'HEAD' })
+        .then(res => {
+          const size = res.headers.get('Content-Length');
+          return size ? formatSize(parseInt(size)) : 'غير معروف';
+        })
+        .catch(() => 'غير معروف');
+    }
+
+    // تحميل قائمة الفيديوهات
     fetch('videos.json')
       .then(res => res.json())
-      .then(videos => {
+      .then(async videos => {
         const container = document.getElementById('videoContainer');
         container.innerHTML = '';
-        videos.forEach((video, i) => {
+
+        for (let i = 0; i < videos.length; i++) {
+          const videoName = videos[i];
+          const videoUrl = `mazen/${videoName}`;
+          const size = await requestFileSize(videoUrl);
+
           const card = document.createElement('div');
           card.className = 'card';
           card.innerHTML = `
-            <video id="vid${i}" controls>
-              <source src="mazen/${video}" type="video/mp4">
+            <video controls>
+              <source src="${videoUrl}" type="video/mp4">
               المتصفح لا يدعم تشغيل الفيديو.
             </video>
+            <div class="size">الحجم: ${size}</div>
             <div class="caption">المقطع ${i + 1}</div>
-            <div class="fullscreen-btn" onclick="toggleFullscreen('vid${i}')">عرض كامل</div>
           `;
+
+          // عند تشغيل الفيديو، اجعله ملء الشاشة
+          const video = card.querySelector('video');
+          video.addEventListener('play', () => {
+            if (video.requestFullscreen) {
+              video.requestFullscreen();
+            } else if (video.webkitRequestFullscreen) {
+              video.webkitRequestFullscreen();
+            } else if (video.msRequestFullscreen) {
+              video.msRequestFullscreen();
+            }
+          });
+
           container.appendChild(card);
-        });
+        }
       })
       .catch(err => {
         document.getElementById('videoContainer').innerText = '⚠️ حدث خطأ أثناء تحميل الفيديوهات.';
         console.error(err);
       });
-
-    function toggleFullscreen(id) {
-      const video = document.getElementById(id);
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-      } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
-      }
-    }
   </script>
 </body>
 </html>
