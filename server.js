@@ -5,10 +5,10 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.static('public'));
-app.use('/Mazen', express.static(path.join(__dirname, 'Mazen')));
+app.use('/mazen', express.static(path.join(__dirname, 'mazen')));
 
 app.get('/videos', (req, res) => {
-  fs.readdir(path.join(__dirname, 'Mazen'), (err, files) => {
+  fs.readdir(path.join(__dirname, 'mazen'), (err, files) => {
     if (err) return res.status(500).send('Error');
     const mp4Files = files.filter(f => f.endsWith('.mp4'));
     res.json(mp4Files);
