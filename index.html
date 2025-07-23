@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>مكتبة Mazen</title>
+  <title>📽 مكتبة Mazen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -46,12 +46,13 @@
 </head>
 <body>
   <header>
-    <h1>📽 مكتبة Mazen</h1>
+    <h1>🎬 مكتبة Mazen</h1>
+    <p style="color: #aaa;">📂 فيديوهات مرفوعة يدويًا</p>
   </header>
   <div class="container" id="videoContainer">جارٍ التحميل...</div>
 
   <script>
-    fetch('/videos')
+    fetch('videos.json')
       .then(res => res.json())
       .then(videos => {
         const container = document.getElementById('videoContainer');
@@ -61,13 +62,17 @@
           card.className = 'card';
           card.innerHTML = `
             <video controls>
-              <source src="/mazen/${video}" type="video/mp4">
+              <source src="mazen/${video}" type="video/mp4">
               المتصفح لا يدعم تشغيل الفيديو.
             </video>
             <div class="caption">المقطع ${i + 1}</div>
           `;
           container.appendChild(card);
         });
+      })
+      .catch(err => {
+        document.getElementById('videoContainer').innerText = '⚠️ حدث خطأ أثناء تحميل الفيديوهات.';
+        console.error(err);
       });
   </script>
 </body>
