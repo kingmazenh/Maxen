@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -33,14 +34,27 @@
       max-width: 400px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
-    video {
+    .card video {
       width: 100%;
-      height: auto;
+      height: 225px;
+      object-fit: cover;
+      background-color: #000;
+      border-bottom: 1px solid #333;
     }
     .caption {
       text-align: center;
       color: #ccc;
       padding: 0.5rem;
+    }
+    .fullscreen-btn {
+      display: block;
+      text-align: center;
+      background: #00ccff;
+      color: black;
+      padding: 0.5rem;
+      border-radius: 0 0 12px 12px;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -61,11 +75,12 @@
           const card = document.createElement('div');
           card.className = 'card';
           card.innerHTML = `
-            <video controls>
+            <video id="vid${i}" controls>
               <source src="mazen/${video}" type="video/mp4">
               المتصفح لا يدعم تشغيل الفيديو.
             </video>
             <div class="caption">المقطع ${i + 1}</div>
+            <div class="fullscreen-btn" onclick="toggleFullscreen('vid${i}')">عرض كامل</div>
           `;
           container.appendChild(card);
         });
@@ -74,6 +89,17 @@
         document.getElementById('videoContainer').innerText = '⚠️ حدث خطأ أثناء تحميل الفيديوهات.';
         console.error(err);
       });
+
+    function toggleFullscreen(id) {
+      const video = document.getElementById(id);
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      }
+    }
   </script>
 </body>
 </html>
