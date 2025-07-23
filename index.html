@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>لعبة الذئب - أوفلاين</title>
+  <title>Werewolf Setup</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>🎭 لعبة الذئب - أوفلاين</h1>
-    
-    <div id="setup">
-      <label>عدد اللاعبين:</label>
-      <input type="number" id="playerCount" min="3" max="20" value="6">
-      <button onclick="startGame()">ابدأ اللعبة</button>
+  <div class="card-board">
+    <div class="moderator">
+      <div class="speech">Welcome to Wolfenheim – a city with a dark secret...</div>
     </div>
 
-    <div id="game" style="display:none;">
-      <p>اللاعب رقم <span id="currentPlayer">1</span></p>
-      <button onclick="showRole()">اعرض دوري</button>
-      <p id="roleDisplay"></p>
-      <button onclick="nextPlayer()" id="nextBtn" style="display:none;">التالي</button>
+    <div class="settings-box">
+      <h2>⚙️ GAME SETTINGS:</h2>
+      <p>7 players, All Random Roles</p>
+
+      <h3>🎴 CARDS IN PLAY:</h3>
+      <div class="cards">
+        <div class="card"><img src="assets/doctor.png" alt="Doctor"><span>Doctor</span></div>
+        <div class="card"><img src="assets/seer.png" alt="Seer"><span>Seer</span></div>
+        <div class="card"><img src="assets/jester.png" alt="Jester"><span>Jester</span></div>
+        <div class="card"><img src="assets/town-crier.png" alt="Town Crier"><span>Town Crier</span></div>
+        <div class="card"><img src="assets/bard.png" alt="Bard"><span>Bard</span></div>
+        <div class="card"><img src="assets/alpha-wolf.png" alt="Alpha Wolf"><span>Alpha Wolf</span></div>
+        <div class="card"><img src="assets/shapeshifter.png" alt="Shapeshifter"><span>Shapeshifter</span></div>
+      </div>
+
+      <button class="rules-btn">📘 GAME RULES</button>
     </div>
 
-    <div id="end" style="display:none;">
-      <p>✅ تم توزيع كل الأدوار!</p>
-      <button onclick="restart()">إعادة اللعب</button>
-    </div>
+    <button class="ok-btn">OK</button>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
